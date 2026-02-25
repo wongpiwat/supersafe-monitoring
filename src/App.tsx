@@ -14,7 +14,8 @@ interface ThreatEvent extends ThreatAnalysis {
   timestamp: string
 }
 
-const VENICE_API_URL = 'https://api.venice.ai/api/v1/chat/completions'
+const VENICE_CHAT_URL = 'https://api.venice.ai/api/v1/chat/completions'
+const VENICE_SPEECH_URL = 'https://api.venice.ai/api/v1/audio/speech'
 const VENICE_MODEL = 'qwen3-vl-235b-a22b'
 
 async function analyzeFrameWithVenice(dataUrl: string): Promise<ThreatAnalysis> {
@@ -47,7 +48,7 @@ async function analyzeFrameWithVenice(dataUrl: string): Promise<ThreatAnalysis> 
     ],
   } as const
 
-  const response = await fetch(VENICE_API_URL, {
+  const response = await fetch(VENICE_CHAT_URL, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -100,6 +101,52 @@ async function analyzeFrameWithVenice(dataUrl: string): Promise<ThreatAnalysis> 
       suggestedAction: 'Review the raw model output and adjust the prompt if necessary.',
     }
   }
+}
+
+async function generateThreatSpeech(summary: string, suggestedAction: string, threatLevel: ThreatLevel) {
+  const apiKey = import.meta.env.VITE_VENICE_API_KEY
+
+  if (!apiKey) {
+    return
+  }
+
+  const spokenText = `Security alert. Threat level: ${threatLevel}. ${summary}. Recommended action: ${suggestedAction}.`
+
+  const body = {
+    input: spokenText,
+    model: 'tts-kokoro',
+    response_format: 'mp3',
+    speed: 1,
+    streaming: false,
+    voice: 'af_sky',
+  } as const
+
+  const response = await fetch(VENICE_SPEECH_URL, {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+      Accept: 'audio/mpeg',
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!response.ok) {
+    // If TTS fails, we still keep the main threat analysis experience working.
+    // eslint-disable-next-line no-console
+    console.error('Venice TTS error', response.status)
+    return
+  }
+
+  const arrayBuffer = await response.arrayBuffer()
+  const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' })
+  const url = URL.createObjectURL(blob)
+
+  const audio = new Audio(url)
+  audio.play().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.error('Unable to play alert audio', err)
+  })
 }
 
 function App() {
@@ -213,6 +260,13 @@ function App() {
           }
 
           setEvents((prev) => [event, ...prev].slice(0, 50))
+
+          if (analysis.threatLevel === 'high' || analysis.threatLevel === 'medium') {
+            generateThreatSpeech(analysis.summary, analysis.suggestedAction, analysis.threatLevel).catch(
+              // eslint-disable-next-line no-console
+              (speechError) => console.error('Unable to generate alert audio', speechError),
+            )
+          }
         }
       } catch (err) {
         console.error(err)
