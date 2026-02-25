@@ -17,6 +17,7 @@ function App() {
   const [events, setEvents] = useState<ThreatEvent[]>([]);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isBigScreen, setIsBigScreen] = useState(false);
+  const [expandedRecIds, setExpandedRecIds] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     let cancelled = false;
@@ -364,6 +365,17 @@ function App() {
                         ? 'Medium threat'
                         : 'Low threat';
 
+                  const isRecommendationExpanded = expandedRecIds.has(event.id);
+                  const recommendationLong = event.suggestedAction.length > 100;
+                  const toggleRecommendation = () => {
+                    setExpandedRecIds((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(event.id)) next.delete(event.id);
+                      else next.add(event.id);
+                      return next;
+                    });
+                  };
+
                   return (
                     <article
                       key={event.id}
@@ -379,16 +391,49 @@ function App() {
                         </span>
                       </div>
                       <p className="mt-2 text-slate-100">{event.summary}</p>
-                      <div className="mt-2 flex items-center justify-between text-[11px] text-slate-400 sm:text-xs">
-                        <span>
-                          Confidence: {(event.confidence * 100).toFixed(0)}%
-                        </span>
-                        <span className="truncate">
-                          Recommended:{' '}
-                          <span className="text-slate-200">
+
+                      <div className="mt-3 space-y-2.5">
+                        <div>
+                          <div className="mb-1 flex items-center justify-between text-[10px] font-medium text-slate-500 sm:text-[11px]">
+                            <span>Confidence</span>
+                            <span className="tabular-nums text-slate-400">
+                              {(event.confidence * 100).toFixed(0)}%
+                            </span>
+                          </div>
+                          <div className="h-1.5 w-full overflow-hidden rounded-full bg-slate-800">
+                            <div
+                              className="h-full rounded-full transition-all duration-300"
+                              style={{
+                                width: `${event.confidence * 100}%`,
+                                backgroundColor:
+                                  event.confidence >= 0.8
+                                    ? 'rgb(34 197 94)'
+                                    : event.confidence >= 0.5
+                                      ? 'rgb(234 179 8)'
+                                      : 'rgb(248 113 113)',
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="rounded-lg border border-slate-700/60 bg-slate-800/40 px-2.5 py-2 sm:px-3 sm:py-2">
+                          <p className="text-[10px] font-medium uppercase tracking-wider text-slate-500 sm:text-[11px]">
+                            Recommended action
+                          </p>
+                          <p
+                            className={`mt-1 text-xs font-medium text-slate-100 sm:text-sm ${recommendationLong && !isRecommendationExpanded ? 'line-clamp-2' : ''}`}>
                             {event.suggestedAction}
-                          </span>
-                        </span>
+                          </p>
+                          {recommendationLong && (
+                            <button
+                              type="button"
+                              onClick={toggleRecommendation}
+                              className="mt-1.5 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 sm:text-xs">
+                              {isRecommendationExpanded
+                                ? 'Show less'
+                                : 'Show more'}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </article>
                   );
