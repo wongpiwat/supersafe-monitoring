@@ -313,8 +313,9 @@ function App() {
                 </span>
               </div>
               <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
-                SuperSafe is built so that your home remains your private space,
-                even while it&apos;s protected by AI.
+                SuperSafe is built to detect threats using home security cameras
+                so that your home remains your private space, even while
+                it&apos;s protected by AI.
               </p>
             </button>
           )}
