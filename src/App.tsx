@@ -211,8 +211,8 @@ function App() {
     : 'mx-auto flex max-w-6xl items-center justify-between px-6 py-4';
 
   const mainContainerClass = isBigScreen
-    ? 'mx-auto flex w-full flex-1 flex-col gap-4 px-3 py-3 sm:px-4 sm:py-4 overflow-hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:min-h-0'
-    : 'mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 overflow-hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:min-h-0';
+    ? 'mx-auto flex w-full flex-1 min-h-0 flex-col gap-4 overflow-y-auto px-3 py-3 sm:px-4 sm:py-4 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:overflow-hidden lg:gap-4'
+    : 'mx-auto flex w-full max-w-6xl flex-1 min-h-0 flex-col gap-6 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:overflow-hidden lg:gap-6';
 
   return (
     <div className="h-screen bg-slate-950 text-slate-50 flex flex-col overflow-hidden">
@@ -243,7 +243,7 @@ function App() {
       </header>
 
       <main className={mainContainerClass}>
-        <section className="flex h-full min-h-0 flex-col space-y-4">
+        <section className="flex flex-col gap-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
           <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -299,30 +299,28 @@ function App() {
             </div>
           )}
 
-          {!isBigScreen && (
-            <button
-              type="button"
-              onClick={() => setIsPrivacyOpen(true)}
-              className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm">
-              <div className="flex items-center justify-between gap-3">
-                <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
-                  Privacy
-                </h3>
-                <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
-                  Learn more
-                </span>
-              </div>
-              <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
-                SuperSafe is built to detect threats using home security cameras
-                so that your home remains your private space, even while
-                it&apos;s protected by AI.
-              </p>
-            </button>
-          )}
+          <button
+            type="button"
+            onClick={() => setIsPrivacyOpen(true)}
+            className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm">
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
+                Privacy
+              </h3>
+              <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
+                Learn more
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
+              SuperSafe is built to detect threats using home security cameras
+              so that your home remains your private space, even while
+              it&apos;s protected by AI.
+            </p>
+          </button>
         </section>
 
-        <section className="flex h-full min-h-0 flex-col space-y-4">
-          <div className="flex h-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
+        <section className="flex flex-col gap-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
+          <div className="flex min-h-0 flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5 lg:h-full">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-sm font-semibold text-slate-50 sm:text-base">
                 Threat Activity Timeline
@@ -334,7 +332,7 @@ function App() {
               </span>
             </div>
 
-            <div className="mt-3 flex-1 space-y-2 overflow-y-auto pr-1">
+            <div className="mt-3 min-h-[220px] flex-1 space-y-2 overflow-y-auto pr-1 lg:min-h-0">
               {events.length === 0 ? (
                 <p className="rounded-xl border border-dashed border-slate-800/80 bg-slate-950/40 px-3 py-4 text-center text-xs text-slate-400 sm:text-sm">
                   When the system detects a potential threat, a summarized,
