@@ -1,3 +1,42 @@
+## SuperSafe Monitoring
+
+AI-powered threat detection with home security cameras — built for privacy.
+
+SuperSafe Monitoring is a privacy-first multimodal AI prototype that turns a webcam or home
+security camera into a lightweight, real-time threat detection agent. Live video is processed
+locally in the browser; sampled frames are sent to the Venice API for AI analysis and converted
+into minimal, structured metadata (for example: “Unknown person detected near front door”).
+
+The UI is built with **React**, **Vite**, and **Tailwind CSS**, and uses Venice&apos;s
+OpenAI-compatible API for vision:
+
+- Venice docs: [`https://docs.venice.ai/overview/about-venice`](https://docs.venice.ai/overview/about-venice)
+
+### Getting started
+
+1. Install dependencies:
+
+   ```bash
+   yarn
+   ```
+
+2. Create a local `.env` file (not committed to git) and add your Venice API key:
+
+   ```bash
+   VITE_VENICE_API_KEY=your_venice_api_key_here
+   ```
+
+3. Run the dev server:
+
+   ```bash
+   yarn dev
+   ```
+
+4. Open the app in your browser, allow camera access when prompted, and click **Start monitoring**
+   to begin sampled frame analysis via Venice vision models.
+
+Your home. Your data. Your control.
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
