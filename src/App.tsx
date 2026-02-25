@@ -113,6 +113,7 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [events, setEvents] = useState<ThreatEvent[]>([])
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
+  const [isBigScreen, setIsBigScreen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -155,6 +156,13 @@ function App() {
     }
 
     setupCamera()
+
+    if (typeof window !== 'undefined') {
+      const stored = window.localStorage.getItem('supersafe-big-screen')
+      if (stored === '1') {
+        setIsBigScreen(true)
+      }
+    }
 
     return () => {
       cancelled = true
@@ -228,6 +236,11 @@ function App() {
     }
   }, [isMonitoring, isCameraReady])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    window.localStorage.setItem('supersafe-big-screen', isBigScreen ? '1' : '0')
+  }, [isBigScreen])
+
   const currentStatus = (() => {
     if (!isCameraReady) return 'Camera not ready'
     if (!isMonitoring) return 'Idle'
@@ -252,10 +265,36 @@ function App() {
     setIsMonitoring((prev) => !prev)
   }
 
+  const handleToggleBigScreen = () => {
+    setIsBigScreen((prev) => {
+      const next = !prev
+
+      // if (next && document.documentElement.requestFullscreen) {
+      //   document.documentElement.requestFullscreen().catch(() => {
+      //     // Ignore fullscreen errors (e.g. user/browser blocks it)
+      //   })
+      // } else if (!next && document.fullscreenElement && document.exitFullscreen) {
+      //   document.exitFullscreen().catch(() => {
+      //     // Ignore exit errors
+      //   })
+      // }
+
+      return next
+    })
+  }
+
+  const headerContainerClass = isBigScreen
+    ? 'mx-auto flex w-full items-center justify-between px-4 py-3 sm:px-6 sm:py-4'
+    : 'mx-auto flex max-w-6xl items-center justify-between px-6 py-4'
+
+  const mainContainerClass = isBigScreen
+    ? 'mx-auto flex w-full flex-1 flex-col gap-4 px-3 py-3 sm:px-4 sm:py-4 overflow-hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:min-h-0'
+    : 'mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 overflow-hidden lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:min-h-0'
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50 flex flex-col">
+    <div className="h-screen bg-slate-950 text-slate-50 flex flex-col overflow-hidden">
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+        <div className={headerContainerClass}>
           <div>
             <h1 className="text-lg font-semibold tracking-tight sm:text-xl">
               SuperSafe Monitoring
@@ -265,16 +304,23 @@ function App() {
             </p>
           </div>
           <div className="flex items-center gap-3">
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-medium text-emerald-300 sm:text-xs">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              Beta prototype
+            <button
+              type="button"
+              onClick={handleToggleBigScreen}
+              className="hidden rounded-full border border-slate-700/80 bg-slate-900 px-3 py-1 text-[11px] font-medium text-slate-200 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/70 hover:bg-emerald-500/10 sm:inline-flex sm:text-xs"
+            >
+              {isBigScreen ? 'Exit big screen' : 'Big screen'}
+            </button>
+            <span className="inline-flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900 px-3 py-1 text-[10px] font-medium text-slate-200 sm:text-xs">
+              <span className={`h-1.5 w-1.5 rounded-full ${statusColor}`} />
+              Live camera feed: {currentStatus}
             </span>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-6 px-4 py-6 sm:px-6 lg:grid lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
-        <section className="space-y-4">
+      <main className={mainContainerClass}>
+        <section className="flex h-full min-h-0 flex-col space-y-4">
           <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
             <div className="flex items-center justify-between gap-3">
               <div>
@@ -332,8 +378,8 @@ function App() {
           )}
         </section>
 
-        <section className="space-y-4">
-          <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
+        <section className="flex h-full min-h-0 flex-col space-y-4">
+          <div className="flex h-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-sm font-semibold text-slate-50 sm:text-base">
                 Threat activity timeline
@@ -343,7 +389,7 @@ function App() {
               </span>
             </div>
 
-            <div className="mt-3 space-y-2 max-h-[420px] overflow-y-auto pr-1">
+            <div className="mt-3 flex-1 space-y-2 overflow-y-auto pr-1">
               {events.length === 0 ? (
                 <p className="rounded-xl border border-dashed border-slate-800/80 bg-slate-950/40 px-3 py-4 text-center text-xs text-slate-400 sm:text-sm">
                   When the system detects a potential threat, a summarized, encrypted event will
@@ -402,24 +448,26 @@ function App() {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setIsPrivacyOpen(true)}
-            className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
-                Privacy by design
-              </h3>
-              <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
-                Learn more
-              </span>
-            </div>
-            <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
-              SuperSafe is built so that your home remains your private space, even while it&apos;s
-              protected by AI.
-            </p>
-          </button>
+          {!isBigScreen && (
+            <button
+              type="button"
+              onClick={() => setIsPrivacyOpen(true)}
+              className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
+                  Privacy by design
+                </h3>
+                <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
+                  Learn more
+                </span>
+              </div>
+              <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
+                SuperSafe is built so that your home remains your private space, even while it&apos;s
+                protected by AI.
+              </p>
+            </button>
+          )}
         </section>
       </main>
 
@@ -502,9 +550,11 @@ function App() {
         </div>
       )}
 
-      <footer className="border-t border-slate-900/80 bg-slate-950/90 py-3 text-center text-[11px] text-slate-500 sm:py-4 sm:text-xs">
-        Your home. Your data. Your control.
-      </footer>
+      {!isBigScreen && (
+        <footer className="border-t border-slate-900/80 bg-slate-950/90 py-3 text-center text-[11px] text-slate-500 sm:py-4 sm:text-xs">
+          Your home. Your data. Your control.
+        </footer>
+      )}
     </div>
   )
 }
