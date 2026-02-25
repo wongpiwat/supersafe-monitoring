@@ -12,6 +12,11 @@ OpenAI-compatible API for vision:
 
 - Venice docs: [`https://docs.venice.ai/overview/about-venice`](https://docs.venice.ai/overview/about-venice)
 
+### Preview
+
+<img width="400" alt="Image" src="https://github.com/user-attachments/assets/52d0f3c5-43cc-4234-9c8d-58b781ecc4d6" />
+
+
 ### Getting started
 
 1. Install dependencies:
