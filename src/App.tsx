@@ -112,6 +112,7 @@ function App() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [events, setEvents] = useState<ThreatEvent[]>([])
+  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false)
 
   useEffect(() => {
     let cancelled = false
@@ -401,16 +402,105 @@ function App() {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-xs text-slate-300 shadow-sm shadow-slate-900/40 sm:p-5 sm:text-sm">
-            <h3 className="text-sm font-semibold text-slate-50 sm:text-base">Privacy by design</h3>
-            <ul className="mt-2 space-y-1.5 text-xs text-slate-400 sm:mt-3 sm:text-sm">
-              <li>• Live video stays in your browser; frames are processed ephemerally.</li>
-              <li>• Only minimal, structured threat summaries are stored in memory.</li>
-              <li>• Configure the Venice API key locally via environment variables only.</li>
-            </ul>
-          </div>
+          <button
+            type="button"
+            onClick={() => setIsPrivacyOpen(true)}
+            className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
+                Privacy by design
+              </h3>
+              <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
+                Learn more
+              </span>
+            </div>
+            <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
+              SuperSafe is built so that your home remains your private space, even while it&apos;s
+              protected by AI.
+            </p>
+          </button>
         </section>
       </main>
+
+      {isPrivacyOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-4 py-6 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="privacy-modal-title"
+        >
+          <div className="relative w-full max-w-lg rounded-2xl border border-slate-800 bg-slate-950 p-4 text-xs text-slate-300 shadow-xl shadow-black/60 sm:p-6 sm:text-sm">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <h2
+                  id="privacy-modal-title"
+                  className="text-base font-semibold text-slate-50 sm:text-lg"
+                >
+                  Privacy by design
+                </h2>
+                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+                  SuperSafe Monitoring is intentionally designed so that powerful AI never comes at
+                  the cost of your personal privacy.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsPrivacyOpen(false)}
+                className="rounded-full border border-slate-700/80 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:border-slate-500 hover:bg-slate-800 sm:text-xs"
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <div>
+                <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
+                  1. Local-first video processing
+                </h3>
+                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+                  Live camera feeds stay inside your browser. Frames are drawn to an in-memory
+                  canvas purely for analysis and are never written to disk or stored on a server by
+                  this app.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
+                  2. Ephemeral AI analysis
+                </h3>
+                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+                  At a fixed interval, a single compressed frame is sent to Venice for threat
+                  analysis. The goal is to convert rich video into minimal structured metadata like
+                  &quot;Unknown person detected at 2:14 AM&quot;, not to stream or archive footage.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
+                  3. Minimal, user-controlled data
+                </h3>
+                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+                  Only high-level incident summaries are kept in memory while the page is open.
+                  There is no built-in cloud database or central log; you stay in control of how and
+                  where incidents are stored or exported.
+                </p>
+              </div>
+
+              <div>
+                <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
+                  4. Secure API configuration
+                </h3>
+                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
+                  The Venice API key is provided via local environment variables. It should never be
+                  hard-coded in the client bundle or committed to version control, keeping your
+                  credentials under your control.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <footer className="border-t border-slate-900/80 bg-slate-950/90 py-3 text-center text-[11px] text-slate-500 sm:py-4 sm:text-xs">
         Your home. Your data. Your control.
