@@ -16,6 +16,9 @@ const VENICE_CHAT_URL = 'https://api.venice.ai/api/v1/chat/completions'
 const VENICE_SPEECH_URL = 'https://api.venice.ai/api/v1/audio/speech'
 const VENICE_MODEL = 'qwen3-vl-235b-a22b'
 
+const audioQueue: string[] = []
+let isPlayingQueue = false
+
 export async function analyzeFrameWithVenice(dataUrl: string): Promise<ThreatAnalysis> {
   const apiKey = import.meta.env.VITE_VENICE_API_KEY
 
@@ -146,10 +149,39 @@ export async function generateThreatSpeech(
   const blob = new Blob([arrayBuffer], { type: 'audio/mpeg' })
   const url = URL.createObjectURL(blob)
 
-  const audio = new Audio(url)
+  audioQueue.push(url)
+
+  if (!isPlayingQueue) {
+    void playNextInQueue()
+  }
+}
+
+async function playNextInQueue() {
+  const nextUrl = audioQueue.shift()
+
+  if (!nextUrl) {
+    isPlayingQueue = false
+    return
+  }
+
+  isPlayingQueue = true
+
+  const audio = new Audio(nextUrl)
+
+  audio.addEventListener(
+    'ended',
+    () => {
+      URL.revokeObjectURL(nextUrl)
+      void playNextInQueue()
+    },
+    { once: true },
+  )
+
   audio.play().catch((err) => {
+    URL.revokeObjectURL(nextUrl)
     // eslint-disable-next-line no-console
     console.error('Unable to play alert audio', err)
+    void playNextInQueue()
   })
 }
 
