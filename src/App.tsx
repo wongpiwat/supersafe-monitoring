@@ -232,11 +232,11 @@ function App() {
               type="button"
               onClick={handleToggleBigScreen}
               className="hidden rounded-full border border-slate-700/80 bg-slate-900 px-3 py-1 text-[11px] font-medium text-slate-200 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/70 hover:bg-emerald-500/10 sm:inline-flex sm:text-xs">
-              {isBigScreen ? 'Exit big screen' : 'Big screen'}
+              {isBigScreen ? 'Exit Big Screen' : 'Big Screen'}
             </button>
             <span className="inline-flex items-center gap-1 rounded-full border border-slate-700/80 bg-slate-900 px-3 py-1 text-[10px] font-medium text-slate-200 sm:text-xs">
               <span className={`h-1.5 w-1.5 rounded-full ${statusColor}`} />
-              Live camera feed: {currentStatus}
+              Live Feed: {currentStatus}
             </span>
           </div>
         </div>
@@ -248,7 +248,7 @@ function App() {
             <div className="flex items-center justify-between gap-3">
               <div>
                 <h2 className="text-sm font-semibold text-slate-50 sm:text-base">
-                  Live camera feed
+                  Live Camera Feed
                 </h2>
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   Video is processed locally in your browser. Only sampled
@@ -260,8 +260,8 @@ function App() {
                   type="button"
                   onClick={handleToggleMonitoring}
                   disabled={!isCameraReady}
-                  className="flex flex-row items-center justify-center rounded-full border border-slate-700/80 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-50 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/80 hover:bg-emerald-500/10 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 sm:px-4 sm:py-2 sm:text-sm">
-                  {isMonitoring ? 'Stop monitoring' : 'Start monitoring'}
+                  className="text-nowrap items-center justify-center rounded-full border border-slate-700/80 bg-slate-800 px-3 py-1.5 text-xs font-medium text-slate-50 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/80 hover:bg-emerald-500/10 disabled:cursor-not-allowed disabled:border-slate-800 disabled:bg-slate-900 disabled:text-slate-500 sm:px-4 sm:py-2 sm:text-sm">
+                  {isMonitoring ? 'Stop Monitoring' : 'Start Monitoring'}
                 </button>
                 <div className="flex items-center gap-1.5 text-[11px] text-slate-400 sm:text-xs">
                   <span className={`h-1.5 w-1.5 rounded-full ${statusColor}`} />
@@ -306,7 +306,7 @@ function App() {
               className="group flex w-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 text-left text-xs text-slate-300 shadow-sm shadow-slate-900/40 transition hover:border-emerald-400/60 hover:bg-slate-900 sm:p-5 sm:text-sm">
               <div className="flex items-center justify-between gap-3">
                 <h3 className="text-sm font-semibold text-slate-50 sm:text-base">
-                  Privacy by design
+                  Privacy
                 </h3>
                 <span className="text-[11px] font-medium text-emerald-300 group-hover:text-emerald-200 sm:text-xs">
                   Learn more
@@ -324,11 +324,11 @@ function App() {
           <div className="flex h-full flex-col rounded-2xl border border-slate-800/80 bg-slate-900/60 p-4 shadow-sm shadow-slate-900/40 sm:p-5">
             <div className="flex items-center justify-between gap-3">
               <h2 className="text-sm font-semibold text-slate-50 sm:text-base">
-                Threat activity timeline
+                Threat Activity Timeline
               </h2>
               <span className="text-[11px] text-slate-400 sm:text-xs">
                 {events.length === 0
-                  ? 'No recent threats'
+                  ? 'No Recent Threats'
                   : `${events.length} events`}
               </span>
             </div>
@@ -412,7 +412,7 @@ function App() {
                 <h2
                   id="privacy-modal-title"
                   className="text-base font-semibold text-slate-50 sm:text-lg">
-                  Privacy by design
+                  Privacy
                 </h2>
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   SuperSafe Monitoring is intentionally designed so that
