@@ -14,7 +14,7 @@ export interface ThreatEvent extends ThreatAnalysis {
 
 const VENICE_CHAT_URL = 'https://api.venice.ai/api/v1/chat/completions';
 const VENICE_SPEECH_URL = 'https://api.venice.ai/api/v1/audio/speech';
-const VENICE_MODEL = 'venice-uncensored';
+const VENICE_MODEL = 'qwen3-vl-235b-a22b';
 
 const audioQueue: string[] = [];
 let isPlayingQueue = false;
