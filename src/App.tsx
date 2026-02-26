@@ -314,8 +314,8 @@ function App() {
             </div>
             <p className="mt-2 text-xs text-slate-400 sm:mt-3 sm:text-sm">
               SuperSafe is built to detect threats using home security cameras
-              so that your home remains your private space, even while
-              it&apos;s protected by AI.
+              so that your home remains your private space, even while it&apos;s
+              protected by AI.
             </p>
           </button>
         </section>
@@ -474,7 +474,7 @@ function App() {
             <div className="mt-4 space-y-3">
               <div>
                 <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
-                  1. Local-first video processing
+                  1. Local Video Processing
                 </h3>
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   Live camera feeds stay inside your browser. Frames are drawn
@@ -485,37 +485,26 @@ function App() {
 
               <div>
                 <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
-                  2. Ephemeral AI analysis
+                  2. AI Analysis
                 </h3>
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   At a fixed interval, a single compressed frame is sent to
                   Venice for threat analysis. The goal is to convert rich video
-                  into minimal structured metadata like &quot;Unknown person
-                  detected at 2:14 AM&quot;, not to stream or archive footage.
+                  into minimal structured metadata and detects a potential
+                  threat like &quot;Person holding a knife to another person's
+                  neck&quot;, not to stream or archive raw footage.
                 </p>
               </div>
 
               <div>
                 <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
-                  3. Minimal, user-controlled data
+                  3. Minimal, user-controlled Data
                 </h3>
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   Only high-level incident summaries are kept in memory while
                   the page is open. There is no built-in cloud database or
                   central log; you stay in control of how and where incidents
                   are stored or exported.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-xs font-semibold text-slate-100 sm:text-sm">
-                  4. Secure API configuration
-                </h3>
-                <p className="mt-1 text-xs text-slate-400 sm:text-sm">
-                  The Venice API key is provided via local environment
-                  variables. It should never be hard-coded in the client bundle
-                  or committed to version control, keeping your credentials
-                  under your control.
                 </p>
               </div>
             </div>
