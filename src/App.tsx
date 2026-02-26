@@ -490,8 +490,8 @@ function App() {
                 <p className="mt-1 text-xs text-slate-400 sm:text-sm">
                   At a fixed interval, a single compressed frame is sent to
                   Venice for threat analysis. The goal is to convert rich video
-                  into minimal structured metadata and detects a potential
-                  threat like &quot;Person holding a knife to another person's
+                  into minimal structured metadata and detect potential threats
+                  like &quot;Person holding a knife to another person's
                   neck&quot;, not to stream or archive raw footage.
                 </p>
               </div>
