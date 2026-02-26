@@ -37,7 +37,7 @@ OpenAI-compatible API for vision:
    yarn dev
    ```
 
-4. Open the app in your browser, allow camera access when prompted, and click **Start monitoring**
+4. Open the app in your browser, allow camera access when prompted, and click **Start Monitoring**
    to begin sampled frame analysis via Venice vision models.
 
 Your home. Your data. Your control.
