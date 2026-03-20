@@ -28,7 +28,8 @@ OpenAI-compatible API for vision:
 2. Create a local `.env` file (not committed to git) and add your Venice API key:
 
    ```bash
-   VITE_VENICE_API_KEY=your_venice_api_key_here
+   VITE_VENICE_API_KEY=venice_api_key
+   VITE_VENICE_MODEL=venice_vision_model_name
    ```
 
 3. Run the dev server:
